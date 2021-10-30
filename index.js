@@ -19,36 +19,32 @@ async function run() {
         await client.connect();
         const database = client.db('hajj_trip');
         const productCollection = database.collection('services');
-        // const orderCollection = database.collection('orders');
+        const orderCollection = database.collection('orders');
+        
 
         //GET Products API
         app.get('/services', async (req, res) => {
             const cursor = productCollection.find({});
             const services = await cursor.toArray();
             res.send(services);
-            console.log(services);
-            // const page = req.query.page;
-            // const size = parseInt(req.query.size);
-            // let products;
-            // const count = await cursor.count();
-
-            // if (page) {
-            //     products = await cursor.skip(page * size).limit(size).toArray();
-            // }
-            // else {
-            //     products = await cursor.toArray();
-            // }
-
-        //     res.send({
-        //         count,
-        //         products
-        //     });
         });
+
+        app.get('/orders', async (req, res) => {
+            const cursor = orderCollection.find({});
+            const orders = await cursor.toArray();
+            res.send(orders);
+            console.log(orders)
+        })
+
+        
         app.post('/orders', async (req, res) => {
             const order = req.body;
             const result = await orderCollection.insertOne(order);
             res.json(result);
+            console.log(result)
         })
+
+       
 
     }
 
